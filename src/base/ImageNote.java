@@ -10,4 +10,17 @@ public class ImageNote extends Note{
 		
 	}
 
+	
+
+	@Override
+	public boolean containKeywords(String[] wds) {
+		for(String wd : wds){
+			String t = getTitle();
+			if(t.toLowerCase().contains(wd)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
