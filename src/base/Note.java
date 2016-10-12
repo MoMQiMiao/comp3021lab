@@ -61,15 +61,19 @@ public abstract class Note implements Comparable<Note>, Serializable{
 	public boolean seacrKeyword(String keywords){
 		String kyd = keywords.toLowerCase();
 		String[] kydlist = kyd.split(" ");
-		boolean contain = true;
+		boolean contain = false;
 		for(int i = 0; i < kydlist.length; i++){
-			String word = kydlist[i];
-			if(word.equals("or") && i != 0){
-				String[] wds = {kydlist[i-1], kydlist[i+1]}; 
-				if(!this.containKeywords(wds)){
-					contain = false;
-					return contain;
-				}
+			String[] word = {kydlist[i]};
+//			if(word.equals("or") && i != 0){
+//				String[] wds = {kydlist[i-1], kydlist[i+1]}; 
+//				if(!this.containKeywords(wds)){
+//					contain = false;
+//					return contain;
+//				}
+//			}
+			
+			if(this.containKeywords(word)){
+				return true;
 			}
 		}
 		
