@@ -1,6 +1,7 @@
 package base;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -61,22 +62,51 @@ public abstract class Note implements Comparable<Note>, Serializable{
 	public boolean seacrKeyword(String keywords){
 		String kyd = keywords.toLowerCase();
 		String[] kydlist = kyd.split(" ");
-		boolean contain = false;
-		for(int i = 0; i < kydlist.length; i++){
-			String[] word = {kydlist[i]};
-//			if(word.equals("or") && i != 0){
-//				String[] wds = {kydlist[i-1], kydlist[i+1]}; 
-//				if(!this.containKeywords(wds)){
-//					contain = false;
-//					return contain;
-//				}
-//			}
+		boolean contain = true;
+		int i= 0;
+		while(i < kydlist.length){
 			
-			if(this.containKeywords(word)){
-				return true;
+			String word = kydlist[i];
+			if(kydlist.length == 1){
+				String[] wds = {kydlist[0]};
+				if (!this.containKeywords(wds)) {
+					contain = false;
+					return contain;
+				}
+				else{
+					return true;
+				}
+			}
+			if(i+1 < kydlist.length){
+				if(!kydlist[i+1].equals("or")){
+					String[] wds = {kydlist[i]};
+					if (!this.containKeywords(wds)) {
+						contain = false;
+						return contain;
+					}
+					i++;
+				}
+				else{
+					ArrayList<String> wds = new ArrayList<>();
+					wds.add(word);
+					int j = i+1;
+					while(j < kydlist.length){
+						if(!kydlist[j].equals("or")){
+							break;							
+						}
+						wds.add(kydlist[j+1]);
+						j = j + 2;
+					}
+					i = j;
+					String[] a = new String[wds.size()];
+					wds.toArray(a);
+					if (!this.containKeywords(a)) {
+						contain = false;
+						return contain;
+					}
+				}
 			}
 		}
-		
 		return contain;
 	}
 	

@@ -104,7 +104,7 @@ public class TextNote extends Note {
 		return r;
 	}
 
-	private String getContent() {
+	public String getContent() {
 		// TODO Auto-generated method stub
 		return content;
 	}
