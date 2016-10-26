@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.sun.crypto.provider.RSACipher;
 
@@ -33,6 +34,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -241,7 +243,6 @@ public class NoteBookWindow extends Application {
 		for(Folder f : noteBook.getFolders()){
 			foldersComboBox.getItems().add(f.getName());
 		}
-//		foldersComboBox.getItems().addAll("FOLDER NAME 1", "FOLDER NAME 2", "FOLDER NAME 3");
 
 		foldersComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
 			@Override
@@ -256,6 +257,27 @@ public class NoteBookWindow extends Application {
 		});
 
 		foldersComboBox.setValue("-----");
+		
+		Button AddFileButton = new Button("Add File");	
+		AddFileButton.setPrefSize(100, 20);
+		AddFileButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				TextInputDialog dialog = new TextInputDialog("Add a Folder");
+				dialog.setTitle("Input");
+				dialog.setHeaderText("Add a new folder");
+				dialog.setContentText("Please enter the folder name");
+				Optional<String> result = dialog.showAndWait();
+				if(result != null){
+				}
+				
+			}
+		});
+		
+		HBox hbox = new HBox();
+		hbox.setSpacing(5);
+		hbox.getChildren().addAll(foldersComboBox, AddFileButton);
 
 		titleslistView.setPrefHeight(100);
 
@@ -289,10 +311,22 @@ public class NoteBookWindow extends Application {
 
 			}
 		});
+		
+		Button addNoteButton = new Button("Add a note");
+		addNoteButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				
+				
+			}
+		});
+		
 		vbox.getChildren().add(new Label("Choose folder: "));
-		vbox.getChildren().add(foldersComboBox);
+		vbox.getChildren().add(hbox);
 		vbox.getChildren().add(new Label("Choose note title"));
 		vbox.getChildren().add(titleslistView);
+		vbox.getChildren().add(addNoteButton);
 
 		return vbox;
 	}
