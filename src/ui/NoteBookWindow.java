@@ -170,11 +170,11 @@ public class NoteBookWindow extends Application {
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setTitle("Successfully Saved!");
 						alert.setContentText("Your file has been save to " + file.getName());
-//						alert.showAndWait().ifPresent(rs -> {
-//							if(rs == ButtonType.OK){
-//								System.out.println("Pressed OK.");
-//							}
-//						});
+						alert.showAndWait().ifPresent(rs -> {
+							if(rs == ButtonType.OK){
+								System.out.println("Pressed OK.");
+							}
+						});
 					}
 				}
 			}
