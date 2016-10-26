@@ -1,7 +1,14 @@
 package ui;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.sun.crypto.provider.RSACipher;
 
 import base.Folder;
 import base.Note;
@@ -16,7 +23,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -27,6 +37,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -70,6 +81,8 @@ public class NoteBookWindow extends Application {
 	String currentSearch = "";
 	
 	TextField textSearch = null;
+	
+	Stage stage; 
 
 	public static void main(String[] args) {
 		launch(NoteBookWindow.class, args);
@@ -78,6 +91,7 @@ public class NoteBookWindow extends Application {
 	@Override
 	public void start(Stage stage) {
 		loadNoteBook();
+		this.stage = stage;
 		// Use a border pane as the root for scene
 		BorderPane border = new BorderPane();
 		// add top, left and center
@@ -104,14 +118,65 @@ public class NoteBookWindow extends Application {
 
 		Button buttonLoad = new Button("Load");
 		buttonLoad.setPrefSize(100, 20);
-		buttonLoad.setDisable(true);
+		buttonLoad.setDisable(false);
 		Button buttonSave = new Button("Save");
 		buttonSave.setPrefSize(100, 20);
-		buttonSave.setDisable(true);
+		buttonSave.setDisable(false);
 		TextField searchBox = new TextField();
 		textSearch = searchBox;
 		Button buttonSearch = new Button("Search");
 		Button buttonClearSearch = new Button("Clear Search");
+		
+		buttonLoad.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Please choose a file which contains a notebook object (*.ser)");
+				
+				FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter("Serialized Object File (*.ser)", "*.ser");
+				fileChooser.getExtensionFilters().add(exFilter);
+				
+				File file = fileChooser.showOpenDialog(stage);
+				if(file != null){
+					if(loadNoteBook(file)){
+						currentFolder = "";
+						foldersComboBox.getItems().clear();
+						for(Folder f : noteBook.getFolders()){
+							foldersComboBox.getItems().add(f.getName());
+						}
+						foldersComboBox.setValue("-----");
+					}					
+				}				
+			}
+		});
+		
+		buttonSave.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Please choose a file which contains a notebook object (*.ser)");
+				
+				FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter("Serialized Object File (*.ser)", "*.ser");
+				fileChooser.getExtensionFilters().add(exFilter);
+				
+				File file = fileChooser.showOpenDialog(stage);
+				
+				if(file != null){
+					if(noteBook.save(file.getName())){
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Successfully Saved!");
+						alert.setContentText("Your file has been save to " + file.getName());
+//						alert.showAndWait().ifPresent(rs -> {
+//							if(rs == ButtonType.OK){
+//								System.out.println("Pressed OK.");
+//							}
+//						});
+					}
+				}
+			}
+		});
 		
 		buttonSearch.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -297,6 +362,27 @@ public class NoteBookWindow extends Application {
 		nb.createTextNote("Holiday", "Christmas", "Possible destinations : Home, New York or Rome");
 		noteBook = nb;
 
+	}
+	
+	private boolean loadNoteBook(File file){
+		try {
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+			Object obj = ois.readObject();
+			this.noteBook = (NoteBook)obj;
+			ois.close();
+			return true;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 
 }

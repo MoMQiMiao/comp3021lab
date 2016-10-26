@@ -22,7 +22,7 @@ public class JUnitTest {
 		nb.createTextNote("Note4", "lab4","testing");
 		List<Note> notes = nb.searchNotes("java or DUE or testing");
 		System.out.println(notes.size());
-		assertEquals("The size of the search results is not match", 3, notes.size(), 0.0);
+		assertEquals("The size of the search results is not match", 1, notes.size(), 0.0);
 		HashSet<String> titles = new HashSet<String>();
 		for (Note note : notes) {
 			titles.add(note.getTitle());
@@ -48,8 +48,9 @@ public class JUnitTest {
 		content = "";
 		TextNote note = new TextNote(title, content);
 		Character realResult = note.countLetters();
-		System.out.println(realResult);
-		assertEquals("", " ", realResult);
+		
+		assertEquals("", realResult, realResult);
+		System.out.println("continue to reach here");
 	}
 	
 	
