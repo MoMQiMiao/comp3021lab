@@ -89,6 +89,28 @@ public class Folder implements Comparable<Folder>, Serializable{
 		
 		return n;
 	}
+
+	public boolean saveNote(String noteName, String content) {
+		for(Note note: notes){
+			if(note.getTitle().equals(noteName)){
+				TextNote tn = (TextNote)note;
+				tn.setContent(content);
+				return true;
+			}
+		}
+		
+		return false;		
+	}
+
+	public boolean deleteNote(String noteName) {
+		for(Note note : notes){
+			if(note.getTitle().equals(noteName)){
+				notes.remove(note);
+				return true;
+			}
+		}
+		return false;
+	}
 	
 
 }

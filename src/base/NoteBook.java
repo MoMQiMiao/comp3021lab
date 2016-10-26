@@ -64,7 +64,7 @@ public class NoteBook implements Serializable{
 		return folders;
 	}
 
-	private boolean insertNote(String folderName, Note note){
+	public boolean insertNote(String folderName, Note note){
 		Folder folder = null;
 		for(Folder f : folders){
 			if(f.getName().equals(folderName)){
@@ -123,5 +123,37 @@ public class NoteBook implements Serializable{
 		}
 		
 		return true;
+	}
+	
+	public boolean FolderIsExisted(String folderName){
+		for(Folder folder : folders){
+			if(folder.getName().equals(folderName)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void addNewFolder(String folderName){
+		Folder folder = new Folder(folderName);
+		folders.add(folder);
+	}
+	
+	public boolean SaveNote(String folderName, String NoteName, String content){
+		for(Folder folder : folders){
+			if(folder.getName().equals(folderName)){
+				return folder.saveNote(NoteName, content);
+			}
+		}
+		return false;
+	}
+	
+	public boolean DeleteNote(String folderName, String noteName){
+		for(Folder folder: folders){
+			if(folder.getName().equals(folderName)){
+				return folder.deleteNote(noteName);
+			}
+		}
+		return false;
 	}
 }

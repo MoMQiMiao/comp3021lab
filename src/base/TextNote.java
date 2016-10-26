@@ -108,4 +108,9 @@ public class TextNote extends Note {
 		// TODO Auto-generated method stub
 		return content;
 	}
+
+	public void setContent(String content) {
+		this.content = content;
+		
+	}
 }
