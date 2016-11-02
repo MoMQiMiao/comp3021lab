@@ -165,7 +165,7 @@ public class PokemonScreenLAB9 extends Application {
 					// no key was pressed return
 					return;
 				}
-				movePikachu(currentPosx, currentPosy);
+				//movePikachu(currentPosx, currentPosy);
 				moveAvatarBy(dx, dy);
 			}
 		};
@@ -194,6 +194,7 @@ public class PokemonScreenLAB9 extends Application {
 		if (x - cx >= 0 && x + cx <= W && y - cy >= 0 && y + cy <= H) {
             // relocate ImageView avatar
 			avatar.relocate(x - cx, y - cy);
+			movePikachu(currentPosx, currentPosy);
 			//update position
 			currentPosx = x - cx;
 			currentPosy = y - cy;
